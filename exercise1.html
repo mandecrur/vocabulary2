@@ -7,124 +7,89 @@
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap');
   :root {
-    --ink: #1a1a2e; --paper: #f7f4ef; --accent: #4f46e5;
-    --accent-light: #eef2ff; --correct: #16a34a; --correct-bg: #dcfce7;
-    --wrong: #dc2626; --wrong-bg: #fee2e2; --neutral: #64748b;
-    --border: #e2e8f0; --card: #ffffff; --shadow: 0 2px 16px rgba(0,0,0,0.08);
+    --ink:#1a1a2e;--paper:#f7f4ef;--accent:#4f46e5;--accent-light:#eef2ff;
+    --correct:#16a34a;--correct-bg:#dcfce7;--wrong:#dc2626;--wrong-bg:#fee2e2;
+    --neutral:#64748b;--border:#e2e8f0;--card:#ffffff;--shadow:0 2px 16px rgba(0,0,0,0.08);
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: 'Inter', sans-serif; background: var(--paper); color: var(--ink); min-height: 100vh; padding: 24px 16px 60px; }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'Inter',sans-serif;background:var(--paper);color:var(--ink);min-height:100vh;padding:24px 16px 60px;}
+  .topbar{display:flex;align-items:center;gap:12px;margin-bottom:28px;max-width:960px;margin-left:auto;margin-right:auto;}
+  .back-btn{text-decoration:none;color:var(--accent);font-weight:600;font-size:0.9rem;border:2px solid var(--border);border-radius:8px;padding:6px 14px;background:var(--card);transition:all .15s;}
+  .back-btn:hover{border-color:var(--accent);background:var(--accent-light);}
+  .topbar-title{font-size:0.85rem;color:var(--neutral);}
+  header{text-align:center;margin-bottom:20px;}
+  header .eyebrow{font-size:.72rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:var(--accent);margin-bottom:6px;}
+  header h1{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,4vw,2.2rem);}
+  header p{color:var(--neutral);font-size:.9rem;margin-top:4px;}
+  .instructions{background:var(--accent-light);border:2px solid var(--accent);border-radius:14px;padding:16px 20px;max-width:960px;margin:0 auto 20px;display:flex;gap:12px;align-items:flex-start;}
+  .instructions .icon{font-size:1.4rem;flex-shrink:0;margin-top:2px;}
+  .instructions h3{font-size:.88rem;font-weight:700;color:var(--accent);margin-bottom:5px;}
+  .instructions ol{padding-left:18px;}
+  .instructions li{font-size:.85rem;color:var(--ink);line-height:1.7;}
+  .instructions li strong{color:var(--accent);}
+  .container{max-width:960px;margin:0 auto;display:flex;flex-direction:column;gap:18px;}
+  .score-bar{background:var(--card);border-radius:14px;padding:12px 18px;box-shadow:var(--shadow);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+  .score-pills{display:flex;gap:8px;flex-wrap:wrap;}
+  .pill{display:flex;align-items:center;gap:5px;padding:5px 12px;border-radius:999px;font-size:.82rem;font-weight:600;}
+  .pill.cp{background:var(--correct-bg);color:var(--correct);}
+  .pill.wp{background:var(--wrong-bg);color:var(--wrong);}
+  .pill.lp{background:var(--accent-light);color:var(--accent);}
+  .dot{width:8px;height:8px;border-radius:50%;}
+  .dot.g{background:var(--correct);}.dot.r{background:var(--wrong);}.dot.b{background:var(--accent);}
+  .btn-row{display:flex;gap:8px;flex-wrap:wrap;}
+  .btn{padding:8px 18px;border-radius:10px;border:none;font-family:'Inter',sans-serif;font-size:.87rem;font-weight:600;cursor:pointer;transition:all .15s;}
+  .btn-primary{background:var(--accent);color:#fff;box-shadow:0 3px 10px rgba(79,70,229,.25);}
+  .btn-primary:hover{background:#4338ca;transform:translateY(-1px);}
+  .btn-secondary{background:var(--paper);color:var(--ink);border:2px solid var(--border);}
+  .btn-secondary:hover{border-color:var(--accent);color:var(--accent);}
+  .progress-wrap{height:6px;background:var(--border);border-radius:999px;overflow:hidden;}
+  .progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),#818cf8);border-radius:999px;transition:width .4s ease;}
+  .exercise-card{background:var(--card);border-radius:16px;box-shadow:var(--shadow);overflow:hidden;}
+  .exercise-header{background:var(--accent);color:#fff;padding:13px 22px;display:flex;align-items:center;justify-content:space-between;}
+  .exercise-header h2{font-family:'Playfair Display',serif;font-size:1.05rem;}
+  .exercise-header .ref{font-size:.76rem;opacity:.8;}
+  .exercise-body{display:grid;grid-template-columns:1fr 1fr;}
+  @media(max-width:640px){.exercise-body{grid-template-columns:1fr;}}
+  .passage-col{padding:20px 20px;border-right:1px solid var(--border);}
+  .speaker-name{font-family:'Playfair Display',serif;font-size:.98rem;color:var(--accent);margin-bottom:9px;padding-bottom:6px;border-bottom:2px solid var(--accent-light);}
+  .passage-text{font-size:.93rem;line-height:1.9;color:var(--ink);}
+  .blank{display:inline-flex;align-items:center;justify-content:center;min-width:88px;padding:1px 8px;margin:0 2px;border-bottom:2.5px solid var(--accent);border-radius:4px 4px 0 0;background:var(--accent-light);cursor:pointer;font-weight:600;font-size:.86rem;color:var(--accent);transition:all .15s;vertical-align:middle;min-height:26px;user-select:none;position:relative;}
+  .blank .num{font-size:.6rem;font-weight:700;position:absolute;top:-10px;left:3px;color:var(--neutral);}
+  .blank:hover:not(.locked){background:#dde4ff;}
+  .blank.correct{border-color:var(--correct);background:var(--correct-bg);color:var(--correct);}
+  .blank.wrong{border-color:var(--wrong);background:var(--wrong-bg);color:var(--wrong);animation:shake .3s ease;}
+  .blank.locked{cursor:default;}
+  @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+  .options-col{padding:16px 16px;}
+  .option-group{margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid var(--border);}
+  .option-group:last-child{border-bottom:none;margin-bottom:0;}
+  .option-qnum{font-size:.7rem;font-weight:700;letter-spacing:1px;color:var(--neutral);margin-bottom:5px;}
+  .options-list{display:flex;flex-wrap:wrap;gap:5px;}
+  .opt-btn{padding:4px 12px;border-radius:999px;border:2px solid var(--border);background:var(--paper);font-family:'Inter',sans-serif;font-size:.82rem;font-weight:500;cursor:pointer;color:var(--ink);transition:all .15s;user-select:none;}
+  .opt-btn:hover:not(.used):not(.selected){border-color:var(--accent);color:var(--accent);}
+  .opt-btn.selected{border-color:var(--accent);background:var(--accent);color:#fff;box-shadow:0 3px 10px rgba(79,70,229,.3);}
+  .opt-btn.used{opacity:.35;cursor:default;text-decoration:line-through;}
+  .feedback-box{display:none;padding:12px 18px;border-radius:12px;font-weight:500;font-size:.9rem;line-height:1.5;}
+  .feedback-box.show{display:block;}
+  .feedback-box.all-correct{background:var(--correct-bg);color:var(--correct);}
+  .feedback-box.has-errors{background:var(--wrong-bg);color:var(--wrong);}
+  .feedback-box.info{background:var(--accent-light);color:var(--accent);}
 
-  .topbar { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; max-width: 900px; margin-left: auto; margin-right: auto; }
-  .back-btn { text-decoration: none; color: var(--accent); font-weight: 600; font-size: 0.9rem; border: 2px solid var(--border); border-radius: 8px; padding: 6px 14px; background: var(--card); transition: all 0.15s; }
-  .back-btn:hover { border-color: var(--accent); background: var(--accent-light); }
-  .topbar-title { font-size: 0.85rem; color: var(--neutral); }
+  /* EXPLANATION PANEL - shown per question after check */
+  .exp-panel{display:none;margin-top:8px;border-radius:10px;padding:10px 14px;font-size:.82rem;line-height:1.6;}
+  .exp-panel.show{display:block;}
+  .exp-panel.correct-exp{background:var(--correct-bg);border-left:3px solid var(--correct);color:#14532d;}
+  .exp-panel.wrong-exp{background:#fff7ed;border-left:3px solid #f97316;color:#7c2d12;}
+  .exp-panel .exp-label{font-weight:700;margin-bottom:3px;font-size:.75rem;letter-spacing:.5px;text-transform:uppercase;}
+  .exp-panel .exp-answer{font-weight:600;margin-bottom:4px;}
 
-  header { text-align: center; margin-bottom: 24px; }
-  header .eyebrow { font-size: 0.72rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
-  header h1 { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem,4vw,2.2rem); }
-  header p { color: var(--neutral); font-size: 0.9rem; margin-top: 4px; }
-
-  /* INSTRUCTIONS */
-  .instructions {
-    background: var(--accent-light); border: 2px solid var(--accent);
-    border-radius: 14px; padding: 18px 22px; max-width: 900px;
-    margin: 0 auto 22px; display: flex; gap: 14px; align-items: flex-start;
-  }
-  .instructions .icon { font-size: 1.5rem; flex-shrink: 0; margin-top: 2px; }
-  .instructions h3 { font-size: 0.9rem; font-weight: 700; color: var(--accent); margin-bottom: 6px; }
-  .instructions ol { padding-left: 18px; }
-  .instructions li { font-size: 0.87rem; color: var(--ink); line-height: 1.7; }
-  .instructions li strong { color: var(--accent); }
-
-  .container { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
-
-  /* SCORE */
-  .score-bar { background: var(--card); border-radius: 14px; padding: 14px 20px; box-shadow: var(--shadow); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
-  .score-pills { display: flex; gap: 8px; flex-wrap: wrap; }
-  .pill { display: flex; align-items: center; gap: 5px; padding: 5px 12px; border-radius: 999px; font-size: 0.82rem; font-weight: 600; }
-  .pill.cp { background: var(--correct-bg); color: var(--correct); }
-  .pill.wp { background: var(--wrong-bg); color: var(--wrong); }
-  .pill.lp { background: var(--accent-light); color: var(--accent); }
-  .dot { width: 8px; height: 8px; border-radius: 50%; }
-  .dot.g { background: var(--correct); } .dot.r { background: var(--wrong); } .dot.b { background: var(--accent); }
-  .btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
-  .btn { padding: 8px 18px; border-radius: 10px; border: none; font-family: 'Inter', sans-serif; font-size: 0.87rem; font-weight: 600; cursor: pointer; transition: all 0.15s; }
-  .btn-primary { background: var(--accent); color: #fff; box-shadow: 0 3px 10px rgba(79,70,229,0.25); }
-  .btn-primary:hover { background: #4338ca; transform: translateY(-1px); }
-  .btn-secondary { background: var(--paper); color: var(--ink); border: 2px solid var(--border); }
-  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
-
-  .progress-wrap { height: 6px; background: var(--border); border-radius: 999px; overflow: hidden; }
-  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), #818cf8); border-radius: 999px; transition: width 0.4s ease; }
-
-  /* EXERCISE CARD */
-  .exercise-card { background: var(--card); border-radius: 16px; box-shadow: var(--shadow); overflow: hidden; }
-  .exercise-header { background: var(--accent); color: #fff; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; }
-  .exercise-header h2 { font-family: 'Playfair Display', serif; font-size: 1.1rem; }
-  .exercise-header .ref { font-size: 0.78rem; opacity: 0.8; }
-  .exercise-body { display: grid; grid-template-columns: 1fr 1fr; }
-  @media(max-width:640px){ .exercise-body { grid-template-columns: 1fr; } }
-
-  .passage-col { padding: 22px 22px; border-right: 1px solid var(--border); }
-  .speaker-name { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--accent); margin-bottom: 10px; padding-bottom: 6px; border-bottom: 2px solid var(--accent-light); }
-  .passage-text { font-size: 0.95rem; line-height: 1.9; color: var(--ink); }
-
-  .blank {
-    display: inline-flex; align-items: center; justify-content: center;
-    min-width: 90px; padding: 1px 8px; margin: 0 2px;
-    border-bottom: 2.5px solid var(--accent); border-radius: 4px 4px 0 0;
-    background: var(--accent-light); cursor: pointer; font-weight: 600;
-    font-size: 0.88rem; color: var(--accent); transition: all 0.15s;
-    vertical-align: middle; min-height: 26px; user-select: none; position: relative;
-  }
-  .blank .num { font-size: 0.62rem; font-weight: 700; position: absolute; top: -10px; left: 3px; color: var(--neutral); }
-  .blank:hover:not(.locked) { background: #dde4ff; }
-  .blank.correct { border-color: var(--correct); background: var(--correct-bg); color: var(--correct); }
-  .blank.wrong   { border-color: var(--wrong);   background: var(--wrong-bg);   color: var(--wrong); animation: shake 0.3s ease; }
-  .blank.locked  { cursor: default; }
-  @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-4px)} 75%{transform:translateX(4px)} }
-
-  .options-col { padding: 18px 18px; }
-  .option-group { margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
-  .option-group:last-child { border-bottom: none; margin-bottom: 0; }
-  .option-qnum { font-size: 0.7rem; font-weight: 700; letter-spacing: 1px; color: var(--neutral); margin-bottom: 6px; }
-  .options-list { display: flex; flex-wrap: wrap; gap: 6px; }
-  .opt-btn {
-    padding: 5px 13px; border-radius: 999px; border: 2px solid var(--border);
-    background: var(--paper); font-family: 'Inter', sans-serif; font-size: 0.83rem;
-    font-weight: 500; cursor: pointer; color: var(--ink); transition: all 0.15s; user-select: none;
-  }
-  .opt-btn:hover:not(.used):not(.selected) { border-color: var(--accent); color: var(--accent); }
-  .opt-btn.selected { border-color: var(--accent); background: var(--accent); color: #fff; box-shadow: 0 3px 10px rgba(79,70,229,0.3); }
-  .opt-btn.used { opacity: 0.35; cursor: default; text-decoration: line-through; }
-
-  /* FEEDBACK */
-  .feedback-box { display: none; padding: 14px 20px; border-radius: 12px; font-weight: 500; font-size: 0.92rem; line-height: 1.5; }
-  .feedback-box.show { display: block; }
-  .feedback-box.all-correct { background: var(--correct-bg); color: var(--correct); }
-  .feedback-box.has-errors  { background: var(--wrong-bg); color: var(--wrong); }
-  .feedback-box.info        { background: var(--accent-light); color: var(--accent); }
-
-  /* EXPLANATIONS */
-  .explanations-card { background: var(--card); border-radius: 16px; box-shadow: var(--shadow); overflow: hidden; display: none; }
-  .explanations-card.show { display: block; }
-  .exp-header { background: var(--correct); color: #fff; padding: 14px 24px; }
-  .exp-header h2 { font-family: 'Playfair Display', serif; font-size: 1.05rem; }
-  .exp-body { padding: 20px 24px; display: flex; flex-direction: column; gap: 14px; }
-  .exp-item { display: flex; gap: 12px; align-items: flex-start; padding: 12px 14px; border-radius: 10px; background: var(--paper); }
-  .exp-num { font-size: 0.72rem; font-weight: 700; background: var(--correct); color: #fff; border-radius: 6px; padding: 3px 8px; flex-shrink: 0; margin-top: 2px; }
-  .exp-text { font-size: 0.87rem; line-height: 1.6; color: var(--ink); }
-  .exp-text strong { color: var(--correct); }
-
-  /* MODAL */
-  .overlay { display: none; position: fixed; inset: 0; background: rgba(26,26,46,0.55); z-index: 100; align-items: center; justify-content: center; padding: 24px; }
-  .overlay.show { display: flex; }
-  .modal { background: var(--card); border-radius: 20px; padding: 36px 28px; max-width: 380px; width: 100%; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
-  .trophy { font-size: 3rem; margin-bottom: 10px; }
-  .modal h2 { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--ink); margin-bottom: 6px; }
-  .modal-score { font-size: 2.4rem; font-weight: 700; color: var(--accent); margin: 10px 0; }
-  .modal p { color: var(--neutral); font-size: 0.92rem; line-height: 1.6; }
+  .overlay{display:none;position:fixed;inset:0;background:rgba(26,26,46,.55);z-index:100;align-items:center;justify-content:center;padding:24px;}
+  .overlay.show{display:flex;}
+  .modal{background:var(--card);border-radius:20px;padding:34px 26px;max-width:380px;width:100%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.2);}
+  .trophy{font-size:3rem;margin-bottom:10px;}
+  .modal h2{font-family:'Playfair Display',serif;font-size:1.5rem;color:var(--ink);margin-bottom:6px;}
+  .modal-score{font-size:2.4rem;font-weight:700;color:var(--accent);margin:10px 0;}
+  .modal p{color:var(--neutral);font-size:.9rem;line-height:1.6;}
 </style>
 </head>
 <body>
@@ -140,23 +105,21 @@
   <p>Questions 46–53 · Read the texts and complete each blank.</p>
 </header>
 
-<!-- INSTRUCTIONS -->
-<div class="instructions" style="max-width:900px;margin:0 auto 22px;">
+<div class="instructions" style="max-width:960px;margin:0 auto 20px;">
   <div class="icon">📋</div>
   <div>
     <h3>How to complete this exercise</h3>
     <ol>
-      <li><strong>Step 1:</strong> Read the text carefully and identify the blank you want to fill.</li>
-      <li><strong>Step 2:</strong> In the options panel on the right, <strong>click the word</strong> you think is correct — it will turn blue.</li>
-      <li><strong>Step 3:</strong> <strong>Click the blank</strong> in the text where it belongs — the word will appear there.</li>
-      <li><strong>Step 4:</strong> If you change your mind, click the blank again (without a word selected) to clear it, then choose a new option.</li>
-      <li><strong>Step 5:</strong> When finished, click <strong>Check all</strong> to see your results. Wrong answers reset so you can retry.</li>
+      <li><strong>Step 1:</strong> Read the text and find the blank you want to fill.</li>
+      <li><strong>Step 2:</strong> <strong>Click an option</strong> on the right panel — it turns blue.</li>
+      <li><strong>Step 3:</strong> <strong>Click the blank</strong> in the text to place the word there.</li>
+      <li><strong>Step 4:</strong> To remove an answer, click the blank without any option selected.</li>
+      <li><strong>Step 5:</strong> Click <strong>Check all</strong> — each blank shows ✅ correct or ❌ wrong, with an explanation.</li>
     </ol>
   </div>
 </div>
 
 <div class="container">
-
   <div class="progress-wrap"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
 
   <div class="score-bar">
@@ -175,46 +138,31 @@
 
   <div class="exercise-card">
     <div class="exercise-header">
-      <h2>Ronan &amp; Jo</h2>
-      <span class="ref">Questions 46–53</span>
+      <h2>Ronan &amp; Jo</h2><span class="ref">Questions 46–53</span>
     </div>
     <div class="exercise-body">
+      <!-- PASSAGE -->
       <div class="passage-col">
         <div class="speaker-name">Ronan</div>
         <div class="passage-text">
-          I work in a <span class="blank" id="b46" data-index="46" onclick="fillBlank(46)"><span class="num">46</span></span> traditional office environment doing a typical nine-to-five job. I like my job, but it's annoying that my commute to work takes an hour and a half each way and most of my work could really be <span class="blank" id="b47" data-index="47" onclick="fillBlank(47)"><span class="num">47</span></span> online from home. But my boss doesn't seem to trust <span class="blank" id="b48" data-index="48" onclick="fillBlank(48)"><span class="num">48</span></span> we will get any work done if left to our own devices, and everyone in the company has to clock in and out every day. It's frustrating that they feel the need to monitor what we do so <span class="blank" id="b49" data-index="49" onclick="fillBlank(49)"><span class="num">49</span></span> instead of judging us based on our task performance, like most companies do these days.
+          I work in a <span class="blank" id="b46" onclick="fillBlank(46)"><span class="num">46</span></span> traditional office environment doing a typical nine-to-five job. I like my job, but it's annoying that my commute to work takes an hour and a half each way and most of my work could really be <span class="blank" id="b47" onclick="fillBlank(47)"><span class="num">47</span></span> online from home. But my boss doesn't seem to trust <span class="blank" id="b48" onclick="fillBlank(48)"><span class="num">48</span></span> we will get any work done if left to our own devices, and everyone in the company has to clock in and out every day. It's frustrating that they feel the need to monitor what we do so <span class="blank" id="b49" onclick="fillBlank(49)"><span class="num">49</span></span> instead of judging us based on our task performance, like most companies do these days.
         </div>
         <br>
         <div class="speaker-name">Jo</div>
         <div class="passage-text">
-          I used to do a typical five-day week, but I wanted to spend more time with my children before they start school, so I talked to my boss to have a hybrid schedule. After negotiating with him, we decided to cut my working week <span class="blank" id="b50" data-index="50" onclick="fillBlank(50)"><span class="num">50</span></span> to a three-day work week. I've noticed, though, that my workload <span class="blank" id="b51" data-index="51" onclick="fillBlank(51)"><span class="num">51</span></span> decreased in the slightest! <span class="blank" id="b52" data-index="52" onclick="fillBlank(52)"><span class="num">52</span></span>, I find myself having to take work home just so that I can meet the deadlines. It's wearing me out trying to juggle work with <span class="blank" id="b53" data-index="53" onclick="fillBlank(53)"><span class="num">53</span></span> my family.
+          I used to do a typical five-day week, but I wanted to spend more time with my children before they start school, so I talked to my boss to have a hybrid schedule. After negotiating with him, we decided to cut my working week <span class="blank" id="b50" onclick="fillBlank(50)"><span class="num">50</span></span> to a three-day work week. I've noticed, though, that my workload <span class="blank" id="b51" onclick="fillBlank(51)"><span class="num">51</span></span> decreased in the slightest! <span class="blank" id="b52" onclick="fillBlank(52)"><span class="num">52</span></span>, I find myself having to take work home just so that I can meet the deadlines. It's wearing me out trying to juggle work with <span class="blank" id="b53" onclick="fillBlank(53)"><span class="num">53</span></span> my family.
         </div>
       </div>
+      <!-- OPTIONS -->
       <div class="options-col" id="optionsCol"></div>
     </div>
   </div>
 
-  <!-- EXPLANATIONS (hidden until all correct) -->
-  <div class="explanations-card" id="explanationsCard">
-    <div class="exp-header"><h2>✅ Answer Explanations</h2></div>
-    <div class="exp-body">
-      <div class="exp-item"><span class="exp-num">46</span><div class="exp-text"><strong>a) fairly</strong> — "Fairly" means "quite" or "moderately" and is the right degree adverb here. "Extremely" would be too strong for a typical office, and "constantly" is an adverb of frequency that doesn't make sense before "traditional".</div></div>
-      <div class="exp-item"><span class="exp-num">47</span><div class="exp-text"><strong>a) done</strong> — The structure is "could be <em>done</em> online", a passive infinitive. "Started" and "explained" don't fit grammatically or in meaning here.</div></div>
-      <div class="exp-item"><span class="exp-num">48</span><div class="exp-text"><strong>c) that</strong> — After "trust", we need a conjunction to introduce a noun clause: "trust <em>that</em> we will get work done." "Where" and "which" don't work in this grammatical context.</div></div>
-      <div class="exp-item"><span class="exp-num">49</span><div class="exp-text"><strong>b) closely</strong> — "Monitor closely" is a fixed collocation meaning to watch carefully. "Nearly" means almost (quantity), and "promptly" means quickly — neither fits with "monitor".</div></div>
-      <div class="exp-item"><span class="exp-num">50</span><div class="exp-text"><strong>c) down</strong> — "Cut down" is a phrasal verb meaning to reduce. "Cut in" means to interrupt, and "cut up" means to chop — neither fits the context of reducing working days.</div></div>
-      <div class="exp-item"><span class="exp-num">51</span><div class="exp-text"><strong>b) hasn't</strong> — The present perfect is needed because this is a situation that started in the past and continues now. "Didn't" (simple past) and "hadn't" (past perfect) don't match the present-result meaning.</div></div>
-      <div class="exp-item"><span class="exp-num">52</span><div class="exp-text"><strong>a) On the contrary</strong> — This connector introduces the opposite of what was just said: workload hasn't decreased; in fact, the opposite is true. "Even though" and "Despite" are concession markers, not contrast connectors at the start of a new sentence.</div></div>
-      <div class="exp-item"><span class="exp-num">53</span><div class="exp-text"><strong>b) looking after</strong> — "Looking after" means taking care of (family). "Taking up" means starting a hobby, and "bringing along" means accompanying someone — neither fits the idea of caring for family.</div></div>
-    </div>
-  </div>
-
-  <div style="text-align:center;margin-top:8px;">
+  <div style="text-align:center;margin-top:4px;">
     <a href="exercise2.html" style="text-decoration:none;">
       <button class="btn btn-primary">Next: Exercise 2 →</button>
     </a>
   </div>
-
 </div>
 
 <div class="overlay" id="overlay">
@@ -233,167 +181,191 @@
 
 <script>
 const questions = {
-  46: { options: ["a) fairly","b) extremely","c) constantly"], answer: "a) fairly" },
-  47: { options: ["a) done","b) started","c) explained"], answer: "a) done" },
-  48: { options: ["a) where","b) which","c) that"], answer: "c) that" },
-  49: { options: ["a) nearly","b) closely","c) promptly"], answer: "b) closely" },
-  50: { options: ["a) in","b) up","c) down"], answer: "c) down" },
-  51: { options: ["a) didn't","b) hasn't","c) hadn't"], answer: "b) hasn't" },
-  52: { options: ["a) On the contrary","b) Even though","c) Despite"], answer: "a) On the contrary" },
-  53: { options: ["a) taking up","b) looking after","c) bringing along"], answer: "b) looking after" },
+  46:{ options:["a) fairly","b) extremely","c) constantly"], answer:"a) fairly",
+       explanation:'<span class="exp-answer">✅ Correct answer: a) fairly</span>"Fairly" means "quite" or "moderately" — the right degree adverb for a typical office. "Extremely" would be too strong, and "constantly" is a frequency adverb that cannot modify the adjective "traditional".' },
+  47:{ options:["a) done","b) started","c) explained"], answer:"a) done",
+       explanation:'<span class="exp-answer">✅ Correct answer: a) done</span>The structure here is passive: "could be <em>done</em> online." "Started" and "explained" don\'t form a correct passive meaning in this context.' },
+  48:{ options:["a) where","b) which","c) that"], answer:"c) that",
+       explanation:'<span class="exp-answer">✅ Correct answer: c) that</span>"Trust <em>that</em>" introduces a noun clause (the content of what the boss doubts). "Where" introduces a place clause and "which" introduces a relative clause — neither fits here.' },
+  49:{ options:["a) nearly","b) closely","c) promptly"], answer:"b) closely",
+       explanation:'<span class="exp-answer">✅ Correct answer: b) closely</span>"Monitor <em>closely</em>" is a fixed collocation meaning to watch carefully. "Nearly" means almost (quantity) and "promptly" means quickly — neither collocates with "monitor".' },
+  50:{ options:["a) in","b) up","c) down"], answer:"c) down",
+       explanation:'<span class="exp-answer">✅ Correct answer: c) down</span>"Cut <em>down</em>" is a phrasal verb meaning to reduce. "Cut in" means to interrupt and "cut up" means to chop into pieces — neither fits reducing working days.' },
+  51:{ options:["a) didn't","b) hasn't","c) hadn't"], answer:"b) hasn't",
+       explanation:'<span class="exp-answer">✅ Correct answer: b) hasn\'t</span>The present perfect ("has/hasn\'t") is needed because the situation began in the past and is still true now. "Didn\'t" (simple past) implies it\'s finished, and "hadn\'t" (past perfect) needs a reference past moment.' },
+  52:{ options:["a) On the contrary","b) Even though","c) Despite"], answer:"a) On the contrary",
+       explanation:'<span class="exp-answer">✅ Correct answer: a) On the contrary</span>This connector introduces the opposite of what was expected: the workload did NOT decrease — in fact, the opposite happened. "Even though" and "Despite" are concession connectors used mid-sentence, not to start a contrasting new idea.' },
+  53:{ options:["a) taking up","b) looking after","c) bringing along"], answer:"b) looking after",
+       explanation:'<span class="exp-answer">✅ Correct answer: b) looking after</span>"Looking after" means caring for someone. "Taking up" means starting a new hobby/activity, and "bringing along" means to take someone somewhere — neither fits the idea of caring for family.' },
 };
 const TOTAL = Object.keys(questions).length;
-let selectedOpt = null, filled = {}, checked = {};
+let selectedOpt=null, filled={}, checked={};
 
-function renderOptions() {
-  const col = document.getElementById('optionsCol');
-  col.innerHTML = '';
-  Object.entries(questions).forEach(([qnum, q]) => {
-    const group = document.createElement('div');
-    group.className = 'option-group';
-    group.id = `group-${qnum}`;
-    const label = document.createElement('div');
-    label.className = 'option-qnum';
-    label.textContent = `Question ${qnum}`;
-    group.appendChild(label);
-    const list = document.createElement('div');
-    list.className = 'options-list';
-    q.options.forEach(opt => {
-      const btn = document.createElement('button');
-      btn.className = 'opt-btn';
-      btn.textContent = opt;
-      btn.dataset.qnum = qnum;
-      btn.dataset.opt = opt;
-      btn.id = `opt-${qnum}-${opt.replace(/\s+/g,'_')}`;
-      btn.onclick = () => selectOpt(btn);
+function renderOptions(){
+  const col=document.getElementById('optionsCol');
+  col.innerHTML='';
+  Object.entries(questions).forEach(([qnum,q])=>{
+    const group=document.createElement('div');
+    group.className='option-group';
+    group.id=`group-${qnum}`;
+    const lbl=document.createElement('div');
+    lbl.className='option-qnum';
+    lbl.textContent=`Question ${qnum}`;
+    group.appendChild(lbl);
+    const list=document.createElement('div');
+    list.className='options-list';
+    q.options.forEach(opt=>{
+      const btn=document.createElement('button');
+      btn.className='opt-btn';
+      btn.textContent=opt;
+      btn.dataset.qnum=qnum;
+      btn.dataset.opt=opt;
+      btn.id=`opt-${qnum}-${opt.replace(/\s+/g,'_')}`;
+      btn.onclick=()=>selectOpt(btn);
       list.appendChild(btn);
     });
     group.appendChild(list);
+    // explanation panel per question (in options column)
+    const exp=document.createElement('div');
+    exp.className='exp-panel';
+    exp.id=`exp-${qnum}`;
+    group.appendChild(exp);
     col.appendChild(group);
   });
 }
 
-function selectOpt(btn) {
-  if (btn.classList.contains('used')) return;
-  const qnum = parseInt(btn.dataset.qnum);
-  if (checked[qnum] === true) return;
-  document.querySelectorAll('.opt-btn.selected').forEach(b => b.classList.remove('selected'));
-  if (selectedOpt && selectedOpt.el === btn) { selectedOpt = null; return; }
+function selectOpt(btn){
+  if(btn.classList.contains('used')) return;
+  const qnum=parseInt(btn.dataset.qnum);
+  if(checked[qnum]===true) return;
+  document.querySelectorAll('.opt-btn.selected').forEach(b=>b.classList.remove('selected'));
+  if(selectedOpt&&selectedOpt.el===btn){selectedOpt=null;return;}
   btn.classList.add('selected');
-  selectedOpt = { qnum, label: btn.dataset.opt, el: btn };
+  selectedOpt={qnum,label:btn.dataset.opt,el:btn};
 }
 
-function fillBlank(qnum) {
-  const blankEl = document.getElementById(`b${qnum}`);
-  if (!blankEl || checked[qnum] === true) return;
-  if (!selectedOpt) {
-    if (filled[qnum]) { freeOpt(qnum); blankEl.innerHTML = `<span class="num">${qnum}</span>`; blankEl.className = 'blank'; delete filled[qnum]; delete checked[qnum]; updateScore(); }
+function fillBlank(qnum){
+  const blankEl=document.getElementById(`b${qnum}`);
+  if(!blankEl||checked[qnum]===true) return;
+  if(!selectedOpt){
+    if(filled[qnum]){
+      freeOpt(qnum);
+      blankEl.innerHTML=`<span class="num">${qnum}</span>`;
+      blankEl.className='blank';
+      delete filled[qnum]; delete checked[qnum];
+      hideExp(qnum); updateScore();
+    }
     return;
   }
-  if (filled[qnum]) freeOpt(qnum);
-  const label = selectedOpt.label;
-  filled[qnum] = label;
+  if(filled[qnum]) freeOpt(qnum);
+  const label=selectedOpt.label;
+  filled[qnum]=label;
   delete checked[qnum];
-  blankEl.innerHTML = `<span class="num">${qnum}</span>${label}`;
-  blankEl.className = 'blank';
-  markUsed(qnum, label);
+  blankEl.innerHTML=`<span class="num">${qnum}</span>${label}`;
+  blankEl.className='blank';
+  markUsed(qnum,label);
   selectedOpt.el.classList.remove('selected');
-  selectedOpt = null;
-  hideFeedback();
-  updateScore();
+  selectedOpt=null;
+  hideFeedback(); hideExp(qnum); updateScore();
 }
 
-function markUsed(qnum, label) {
-  const btn = document.getElementById(`opt-${qnum}-${label.replace(/\s+/g,'_')}`);
-  if (btn) btn.classList.add('used');
+function markUsed(qnum,label){
+  const btn=document.getElementById(`opt-${qnum}-${label.replace(/\s+/g,'_')}`);
+  if(btn) btn.classList.add('used');
+}
+function freeOpt(qnum){
+  const prev=filled[qnum];
+  if(!prev) return;
+  const btn=document.getElementById(`opt-${qnum}-${prev.replace(/\s+/g,'_')}`);
+  if(btn) btn.classList.remove('used');
+}
+function hideExp(qnum){
+  const p=document.getElementById(`exp-${qnum}`);
+  if(p){p.className='exp-panel';p.innerHTML='';}
 }
 
-function freeOpt(qnum) {
-  const prev = filled[qnum];
-  if (!prev) return;
-  const btn = document.getElementById(`opt-${qnum}-${prev.replace(/\s+/g,'_')}`);
-  if (btn) btn.classList.remove('used');
-}
+function checkAll(){
+  let correct=0,wrong=0;
+  Object.entries(filled).forEach(([qnum,label])=>{
+    const n=parseInt(qnum);
+    const q=questions[n];
+    const isCorrect=label===q.answer;
+    checked[n]=isCorrect;
+    const blankEl=document.getElementById(`b${n}`);
+    if(!blankEl) return;
+    blankEl.innerHTML=`<span class="num">${n}</span>${label}`;
+    blankEl.className='blank locked '+(isCorrect?'correct':'wrong');
 
-function checkAll() {
-  let correct = 0, wrong = 0;
-  Object.entries(filled).forEach(([qnum, label]) => {
-    const n = parseInt(qnum);
-    const isCorrect = label === questions[n].answer;
-    checked[n] = isCorrect;
-    const blankEl = document.getElementById(`b${n}`);
-    if (!blankEl) return;
-    blankEl.innerHTML = `<span class="num">${n}</span>${label}`;
-    blankEl.className = 'blank locked ' + (isCorrect ? 'correct' : 'wrong');
-    if (isCorrect) correct++;
-    else {
+    // Show explanation in the options panel
+    const expEl=document.getElementById(`exp-${n}`);
+    if(expEl){
+      expEl.innerHTML=`<div class="exp-label">${isCorrect?'✅ Correct':'❌ Incorrect'}</div>${q.explanation}`;
+      expEl.className='exp-panel show '+(isCorrect?'correct-exp':'wrong-exp');
+    }
+
+    if(isCorrect) correct++;
+    else{
       wrong++;
-      setTimeout(() => {
+      setTimeout(()=>{
         freeOpt(n); delete filled[n]; delete checked[n];
-        blankEl.innerHTML = `<span class="num">${n}</span>`;
-        blankEl.className = 'blank';
-        blankEl.onclick = () => fillBlank(n);
+        blankEl.innerHTML=`<span class="num">${n}</span>`;
+        blankEl.className='blank';
+        blankEl.onclick=()=>fillBlank(n);
         updateScore();
-      }, 1200);
+      },2500);
     }
   });
-  const filledCount = Object.keys(filled).length;
-  const remaining = TOTAL - filledCount;
+  const filledCount=Object.keys(filled).length;
   updateScore();
-  if (remaining > 0 && wrong === 0) {
-    showFeedback(`You still have ${remaining} blank(s) to fill. Keep going!`, 'info');
-  } else if (wrong === 0 && correct === TOTAL) {
-    showFeedback('🎉 Perfect! All 8 answers are correct. Read the explanations below.', 'all-correct');
-    document.getElementById('explanationsCard').classList.add('show');
-    setTimeout(() => showModal(correct), 500);
-  } else if (wrong > 0) {
-    showFeedback(`${correct} correct so far. The ${wrong} wrong answer(s) will reset — try again!`, 'has-errors');
+  if((TOTAL-filledCount)>0&&wrong===0){
+    showFeedback(`You still have ${TOTAL-filledCount} blank(s) to fill. Keep going!`,'info');
+  } else if(wrong===0&&correct===TOTAL){
+    showFeedback('🎉 Perfect! All 8 answers are correct. Read the explanations on the right.','all-correct');
+    setTimeout(()=>showModal(correct),500);
+  } else if(wrong>0){
+    showFeedback(`${correct} correct and ${wrong} wrong. Read the explanations — wrong answers will reset in a moment.`,'has-errors');
   }
 }
 
-function updateScore() {
-  const correctCount = Object.values(checked).filter(v => v === true).length;
-  const wrongCount   = Object.values(checked).filter(v => v === false).length;
-  const filledCount  = Object.keys(filled).length + correctCount;
-  document.getElementById('scoreCorrect').textContent = correctCount;
-  document.getElementById('scoreWrong').textContent   = wrongCount;
-  document.getElementById('scoreLeft').textContent    = Math.max(0, TOTAL - filledCount);
-  document.getElementById('progressFill').style.width = (filledCount / TOTAL * 100) + '%';
+function updateScore(){
+  const c=Object.values(checked).filter(v=>v===true).length;
+  const w=Object.values(checked).filter(v=>v===false).length;
+  const f=Object.keys(filled).length+c;
+  document.getElementById('scoreCorrect').textContent=c;
+  document.getElementById('scoreWrong').textContent=w;
+  document.getElementById('scoreLeft').textContent=Math.max(0,TOTAL-f);
+  document.getElementById('progressFill').style.width=(f/TOTAL*100)+'%';
 }
-
-function showFeedback(msg, type) {
-  const box = document.getElementById('feedbackBox');
-  box.className = `feedback-box show ${type}`;
-  box.textContent = msg;
+function showFeedback(msg,type){
+  const box=document.getElementById('feedbackBox');
+  box.className=`feedback-box show ${type}`;
+  box.textContent=msg;
 }
-function hideFeedback() { document.getElementById('feedbackBox').className = 'feedback-box'; }
+function hideFeedback(){document.getElementById('feedbackBox').className='feedback-box';}
 
-function resetAll() {
-  filled = {}; checked = {}; selectedOpt = null;
+function resetAll(){
+  filled={}; checked={}; selectedOpt=null;
   hideFeedback();
-  document.getElementById('explanationsCard').classList.remove('show');
-  Object.keys(questions).forEach(qnum => {
-    const n = parseInt(qnum);
-    const el = document.getElementById(`b${n}`);
-    if (el) { el.innerHTML = `<span class="num">${n}</span>`; el.className = 'blank'; }
+  Object.keys(questions).forEach(qnum=>{
+    const n=parseInt(qnum);
+    const el=document.getElementById(`b${n}`);
+    if(el){el.innerHTML=`<span class="num">${n}</span>`;el.className='blank';}
+    hideExp(n);
   });
-  document.querySelectorAll('.opt-btn').forEach(btn => btn.classList.remove('used','selected'));
+  document.querySelectorAll('.opt-btn').forEach(btn=>btn.classList.remove('used','selected'));
   updateScore();
 }
-
-function showModal(correct) {
-  const pct = Math.round(correct / TOTAL * 100);
-  document.getElementById('modalTrophy').textContent = pct === 100 ? '🏆' : '🌟';
-  document.getElementById('modalTitle').textContent  = pct === 100 ? 'Perfect score!' : 'Great work!';
-  document.getElementById('modalScore').textContent  = `${correct} / ${TOTAL}`;
-  document.getElementById('modalMsg').textContent    = pct === 100 ? 'Excellent! You answered all 8 questions correctly. Check the explanations to understand each answer.' : `You got ${correct} out of ${TOTAL}. Review the explanations and try again.`;
+function showModal(correct){
+  const pct=Math.round(correct/TOTAL*100);
+  document.getElementById('modalTrophy').textContent=pct===100?'🏆':'🌟';
+  document.getElementById('modalTitle').textContent=pct===100?'Perfect score!':'Great work!';
+  document.getElementById('modalScore').textContent=`${correct} / ${TOTAL}`;
+  document.getElementById('modalMsg').textContent=pct===100?'Excellent! All 8 answers correct. Review the explanations to consolidate what you learned.':`You got ${correct} out of ${TOTAL}. Read the explanations and try again.`;
   document.getElementById('overlay').classList.add('show');
 }
-function closeModal() { document.getElementById('overlay').classList.remove('show'); }
-document.getElementById('overlay').addEventListener('click', function(e){ if(e.target===this) closeModal(); });
-
-renderOptions();
-updateScore();
+function closeModal(){document.getElementById('overlay').classList.remove('show');}
+document.getElementById('overlay').addEventListener('click',function(e){if(e.target===this)closeModal();});
+renderOptions(); updateScore();
 </script>
 </body>
 </html>

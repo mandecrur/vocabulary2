@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Exercise 2 – Martina &amp; Leo</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap');
+  :root {
+    --ink: #1a1a2e; --paper: #f7f4ef; --accent: #4f46e5;
+    --accent-light: #eef2ff; --correct: #16a34a; --correct-bg: #dcfce7;
+    --wrong: #dc2626; --wrong-bg: #fee2e2; --neutral: #64748b;
+    --border: #e2e8f0; --card: #ffffff; --shadow: 0 2px 16px rgba(0,0,0,0.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'Inter', sans-serif; background: var(--paper); color: var(--ink); min-height: 100vh; padding: 24px 16px 60px; }
+
+  .topbar { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; max-width: 900px; margin-left: auto; margin-right: auto; }
+  .back-btn { text-decoration: none; color: var(--accent); font-weight: 600; font-size: 0.9rem; border: 2px solid var(--border); border-radius: 8px; padding: 6px 14px; background: var(--card); transition: all 0.15s; }
+  .back-btn:hover { border-color: var(--accent); background: var(--accent-light); }
+  .topbar-title { font-size: 0.85rem; color: var(--neutral); }
+
+  header { text-align: center; margin-bottom: 24px; }
+  header .eyebrow { font-size: 0.72rem; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: var(--accent); margin-bottom: 6px; }
+  header h1 { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem,4vw,2.2rem); }
+  header p { color: var(--neutral); font-size: 0.9rem; margin-top: 4px; }
+
+  .instructions {
+    background: var(--accent-light); border: 2px solid var(--accent);
+    border-radius: 14px; padding: 18px 22px; max-width: 900px;
+    margin: 0 auto 22px; display: flex; gap: 14px; align-items: flex-start;
+  }
+  .instructions .icon { font-size: 1.5rem; flex-shrink: 0; margin-top: 2px; }
+  .instructions h3 { font-size: 0.9rem; font-weight: 700; color: var(--accent); margin-bottom: 6px; }
+  .instructions ol { padding-left: 18px; }
+  .instructions li { font-size: 0.87rem; color: var(--ink); line-height: 1.7; }
+  .instructions li strong { color: var(--accent); }
+
+  .container { max-width: 900px; margin: 0 auto; display: flex; flex-direction: column; gap: 20px; }
+
+  .score-bar { background: var(--card); border-radius: 14px; padding: 14px 20px; box-shadow: var(--shadow); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
+  .score-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+  .pill { display: flex; align-items: center; gap: 5px; padding: 5px 12px; border-radius: 999px; font-size: 0.82rem; font-weight: 600; }
+  .pill.cp { background: var(--correct-bg); color: var(--correct); }
+  .pill.wp { background: var(--wrong-bg); color: var(--wrong); }
+  .pill.lp { background: var(--accent-light); color: var(--accent); }
+  .dot { width: 8px; height: 8px; border-radius: 50%; }
+  .dot.g { background: var(--correct); } .dot.r { background: var(--wrong); } .dot.b { background: var(--accent); }
+  .btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn { padding: 8px 18px; border-radius: 10px; border: none; font-family: 'Inter', sans-serif; font-size: 0.87rem; font-weight: 600; cursor: pointer; transition: all 0.15s; }
+  .btn-primary { background: var(--accent); color: #fff; box-shadow: 0 3px 10px rgba(79,70,229,0.25); }
+  .btn-primary:hover { background: #4338ca; transform: translateY(-1px); }
+  .btn-secondary { background: var(--paper); color: var(--ink); border: 2px solid var(--border); }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); }
+
+  .progress-wrap { height: 6px; background: var(--border); border-radius: 999px; overflow: hidden; }
+  .progress-fill { height: 100%; background: linear-gradient(90deg, var(--accent), #818cf8); border-radius: 999px; transition: width 0.4s ease; }
+
+  .exercise-card { background: var(--card); border-radius: 16px; box-shadow: var(--shadow); overflow: hidden; }
+  .exercise-header { background: var(--accent); color: #fff; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; }
+  .exercise-header h2 { font-family: 'Playfair Display', serif; font-size: 1.1rem; }
+  .exercise-header .ref { font-size: 0.78rem; opacity: 0.8; }
+  .exercise-body { display: grid; grid-template-columns: 1fr 1fr; }
+  @media(max-width:640px){ .exercise-body { grid-template-columns: 1fr; } }
+
+  .passage-col { padding: 22px 22px; border-right: 1px solid var(--border); }
+  .speaker-name { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--accent); margin-bottom: 10px; padding-bottom: 6px; border-bottom: 2px solid var(--accent-light); }
+  .passage-text { font-size: 0.95rem; line-height: 1.9; color: var(--ink); }
+
+  .blank {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 90px; padding: 1px 8px; margin: 0 2px;
+    border-bottom: 2.5px solid var(--accent); border-radius: 4px 4px 0 0;
+    background: var(--accent-light); cursor: pointer; font-weight: 600;
+    font-size: 0.88rem; color: var(--accent); transition: all 0.15s;
+    vertical-align: middle; min-height: 26px; user-select: none; position: relative;
+  }
+  .blank .num { font-size: 0.62rem; font-weight: 700; position: absolute; top: -10px; left: 3px; color: var(--neutral); }
+  .blank:hover:not(.locked) { background: #dde4ff; }
+  .blank.correct { border-color: var(--correct); background: var(--correct-bg); color: var(--correct); }
+  .blank.wrong   { border-color: var(--wrong);   background: var(--wrong-bg);   color: var(--wrong); animation: shake 0.3s ease; }
+  .blank.locked  { cursor: default; }
+  @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-4px)} 75%{transform:translateX(4px)} }
+
+  .options-col { padding: 18px 18px; }
+  .option-group { margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border); }
+  .option-group:last-child { border-bottom: none; margin-bottom: 0; }
+  .option-qnum { font-size: 0.7rem; font-weight: 700; letter-spacing: 1px; color: var(--neutral); margin-bottom: 6px; }
+  .options-list { display: flex; flex-wrap: wrap; gap: 6px; }
+  .opt-btn { padding: 5px 13px; border-radius: 999px; border: 2px solid var(--border); background: var(--paper); font-family: 'Inter', sans-serif; font-size: 0.83rem; font-weight: 500; cursor: pointer; color: var(--ink); transition: all 0.15s; user-select: none; }
+  .opt-btn:hover:not(.used):not(.selected) { border-color: var(--accent); color: var(--accent); }
+  .opt-btn.selected { border-color: var(--accent); background: var(--accent); color: #fff; box-shadow: 0 3px 10px rgba(79,70,229,0.3); }
+  .opt-btn.used { opacity: 0.35; cursor: default; text-decoration: line-through; }
+
+  .feedback-box { display: none; padding: 14px 20px; border-radius: 12px; font-weight: 500; font-size: 0.92rem; line-height: 1.5; }
+  .feedback-box.show { display: block; }
+  .feedback-box.all-correct { background: var(--correct-bg); color: var(--correct); }
+  .feedback-box.has-errors  { background: var(--wrong-bg); color: var(--wrong); }
+  .feedback-box.info        { background: var(--accent-light); color: var(--accent); }
+
+  .explanations-card { background: var(--card); border-radius: 16px; box-shadow: var(--shadow); overflow: hidden; display: none; }
+  .explanations-card.show { display: block; }
+  .exp-header { background: var(--correct); color: #fff; padding: 14px 24px; }
+  .exp-header h2 { font-family: 'Playfair Display', serif; font-size: 1.05rem; }
+  .exp-body { padding: 20px 24px; display: flex; flex-direction: column; gap: 14px; }
+  .exp-item { display: flex; gap: 12px; align-items: flex-start; padding: 12px 14px; border-radius: 10px; background: var(--paper); }
+  .exp-num { font-size: 0.72rem; font-weight: 700; background: var(--correct); color: #fff; border-radius: 6px; padding: 3px 8px; flex-shrink: 0; margin-top: 2px; }
+  .exp-text { font-size: 0.87rem; line-height: 1.6; color: var(--ink); }
+  .exp-text strong { color: var(--correct); }
+
+  .overlay { display: none; position: fixed; inset: 0; background: rgba(26,26,46,0.55); z-index: 100; align-items: center; justify-content: center; padding: 24px; }
+  .overlay.show { display: flex; }
+  .modal { background: var(--card); border-radius: 20px; padding: 36px 28px; max-width: 380px; width: 100%; text-align: center; box-shadow: 0 20px 60px rgba(0,0,0,0.2); }
+  .trophy { font-size: 3rem; margin-bottom: 10px; }
+  .modal h2 { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--ink); margin-bottom: 6px; }
+  .modal-score { font-size: 2.4rem; font-weight: 700; color: var(--accent); margin: 10px 0; }
+  .modal p { color: var(--neutral); font-size: 0.92rem; line-height: 1.6; }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <a class="back-btn" href="index.html">← Back to menu</a>
+  <span class="topbar-title">A37-EBRS-11 · Work-life Balance</span>
+</div>
+
+<header>
+  <div class="eyebrow">Exercise 2 of 2</div>
+  <h1>Martina &amp; Leo</h1>
+  <p>Questions 54–60 · Read the texts and complete each blank.</p>
+</header>
+
+<div class="instructions" style="max-width:900px;margin:0 auto 22px;">
+  <div class="icon">📋</div>
+  <div>
+    <h3>How to complete this exercise</h3>
+    <ol>
+      <li><strong>Step 1:</strong> Read the text carefully and identify the blank you want to fill.</li>
+      <li><strong>Step 2:</strong> In the options panel on the right, <strong>click the word</strong> you think is correct — it will turn blue.</li>
+      <li><strong>Step 3:</strong> <strong>Click the blank</strong> in the text where it belongs — the word will appear there.</li>
+      <li><strong>Step 4:</strong> If you change your mind, click the blank again (without a word selected) to clear it, then choose a new option.</li>
+      <li><strong>Step 5:</strong> When finished, click <strong>Check all</strong> to see your results. Wrong answers reset so you can retry.</li>
+    </ol>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="progress-wrap"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+
+  <div class="score-bar">
+    <div class="score-pills">
+      <div class="pill cp"><span class="dot g"></span> <span id="scoreCorrect">0</span> correct</div>
+      <div class="pill wp"><span class="dot r"></span> <span id="scoreWrong">0</span> wrong</div>
+      <div class="pill lp"><span class="dot b"></span> <span id="scoreLeft">7</span> remaining</div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-secondary" onclick="checkAll()">Check all</button>
+      <button class="btn btn-secondary" onclick="resetAll()">Reset</button>
+    </div>
+  </div>
+
+  <div class="feedback-box" id="feedbackBox"></div>
+
+  <div class="exercise-card">
+    <div class="exercise-header">
+      <h2>Martina &amp; Leo</h2>
+      <span class="ref">Questions 54–60</span>
+    </div>
+    <div class="exercise-body">
+      <div class="passage-col">
+        <div class="speaker-name">Martina</div>
+        <div class="passage-text">
+          I work for a global IT company, but <span class="blank" id="b54" data-index="54" onclick="fillBlank(54)"><span class="num">54</span></span> their headquarters is in the States, I do all my work online from home. That means that I don't waste time <span class="blank" id="b55" data-index="55" onclick="fillBlank(55)"><span class="num">55</span></span> or making idle chitchat with colleagues. I work on a project basis, and this flexibility is very valuable to me because it means that I can easily take some time off if I need to <span class="blank" id="b56" data-index="56" onclick="fillBlank(56)"><span class="num">56</span></span> an appointment with the dentist. The downside is that I sometimes miss sharing ideas with colleagues.
+        </div>
+        <br>
+        <div class="speaker-name">Leo</div>
+        <div class="passage-text">
+          I'm a freelancer and work for myself. This is great because I am in control of what I do and how I spend my time. At first, I was working from home, but I found it really hard to concentrate because there were just <span class="blank" id="b57" data-index="57" onclick="fillBlank(57)"><span class="num">57</span></span> distractions around. <span class="blank" id="b58" data-index="58" onclick="fillBlank(58)"><span class="num">58</span></span>, I started to go to a nearby café to work, but the Wi-Fi connection wasn't ideal and I found myself drinking too much coffee. In the end, I decided to rent a desk in a co-working space with five other freelancers like <span class="blank" id="b59" data-index="59" onclick="fillBlank(59)"><span class="num">59</span></span>. I liked getting dressed to go to work in the morning and being able to focus in an office environment. The other freelancers do similar kinds of web-based work to me and so it's nice to have workmates to bounce ideas <span class="blank" id="b60" data-index="60" onclick="fillBlank(60)"><span class="num">60</span></span> as well.
+        </div>
+      </div>
+      <div class="options-col" id="optionsCol"></div>
+    </div>
+  </div>
+
+  <!-- EXPLANATIONS -->
+  <div class="explanations-card" id="explanationsCard">
+    <div class="exp-header"><h2>✅ Answer Explanations</h2></div>
+    <div class="exp-body">
+      <div class="exp-item"><span class="exp-num">54</span><div class="exp-text"><strong>a) because</strong> — The sentence expresses a reason: she works from home <em>because</em> the headquarters is in the States. "Due to" must be followed by a noun, not a clause. "Thus" expresses result, not reason.</div></div>
+      <div class="exp-item"><span class="exp-num">55</span><div class="exp-text"><strong>b) commuting</strong> — "Commuting" means travelling to and from work. The context says she works from home so she doesn't waste time on the daily journey. "Transferring" and "going" don't collocate naturally with "waste time" in this context.</div></div>
+      <div class="exp-item"><span class="exp-num">56</span><div class="exp-text"><strong>c) schedule</strong> — "Schedule an appointment" is the standard collocation (to arrange a time). "Call an appointment" is not standard English, and "separate an appointment" has no meaning in this context.</div></div>
+      <div class="exp-item"><span class="exp-num">57</span><div class="exp-text"><strong>c) a lot of</strong> — "A lot of distractions" is the natural quantifier here. "Many" also works with countable nouns but is more formal; "much" is used with uncountable nouns. In the original text, "a lot" fits the informal register of Leo's story.</div></div>
+      <div class="exp-item"><span class="exp-num">58</span><div class="exp-text"><strong>c) Thus</strong> — "Thus" (meaning "so" or "as a result") connects the problem (distractions at home) with the solution (going to a café). "For instance" introduces examples, and "Although" introduces contrast — neither fits here.</div></div>
+      <div class="exp-item"><span class="exp-num">59</span><div class="exp-text"><strong>a) myself</strong> — Leo is talking about himself: "freelancers like <em>myself</em>." The subject of the whole text is Leo (first person), so the reflexive pronoun must be first-person singular. "Herself" (third person feminine) and "yourself" (second person) are incorrect.</div></div>
+      <div class="exp-item"><span class="exp-num">60</span><div class="exp-text"><strong>a) back</strong> — "Bounce ideas back" (or "bounce ideas back and forth") is an idiom meaning to exchange and discuss ideas with someone. "Bounce into" and "bounce off" don't form the correct phrasal expression in this context.</div></div>
+    </div>
+  </div>
+
+  <div style="text-align:center;margin-top:8px;">
+    <a href="exercise1.html" style="text-decoration:none;">
+      <button class="btn btn-secondary">← Back to Exercise 1</button>
+    </a>
+    <a href="index.html" style="text-decoration:none;margin-left:10px;">
+      <button class="btn btn-primary">🏠 Menu</button>
+    </a>
+  </div>
+
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="trophy" id="modalTrophy">🏆</div>
+    <h2 id="modalTitle">Perfect!</h2>
+    <div class="modal-score" id="modalScore"></div>
+    <p id="modalMsg"></p>
+    <br>
+    <div class="btn-row" style="justify-content:center;margin-top:8px;">
+      <button class="btn btn-secondary" onclick="closeModal()">Review</button>
+      <button class="btn btn-primary" onclick="window.location='index.html'">🏠 Menu</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const questions = {
+  54: { options: ["a) because","b) due to","c) thus"], answer: "a) because" },
+  55: { options: ["a) transferring","b) commuting","c) going"], answer: "b) commuting" },
+  56: { options: ["a) call","b) separate","c) schedule"], answer: "c) schedule" },
+  57: { options: ["a) many","b) much","c) a lot of"], answer: "c) a lot of" },
+  58: { options: ["a) For instance","b) Although","c) Thus"], answer: "c) Thus" },
+  59: { options: ["a) myself","b) herself","c) yourself"], answer: "a) myself" },
+  60: { options: ["a) back","b) into","c) off"], answer: "a) back" },
+};
+const TOTAL = Object.keys(questions).length;
+let selectedOpt = null, filled = {}, checked = {};
+
+function renderOptions() {
+  const col = document.getElementById('optionsCol');
+  col.innerHTML = '';
+  Object.entries(questions).forEach(([qnum, q]) => {
+    const group = document.createElement('div');
+    group.className = 'option-group';
+    group.id = `group-${qnum}`;
+    const label = document.createElement('div');
+    label.className = 'option-qnum';
+    label.textContent = `Question ${qnum}`;
+    group.appendChild(label);
+    const list = document.createElement('div');
+    list.className = 'options-list';
+    q.options.forEach(opt => {
+      const btn = document.createElement('button');
+      btn.className = 'opt-btn';
+      btn.textContent = opt;
+      btn.dataset.qnum = qnum;
+      btn.dataset.opt = opt;
+      btn.id = `opt-${qnum}-${opt.replace(/\s+/g,'_')}`;
+      btn.onclick = () => selectOpt(btn);
+      list.appendChild(btn);
+    });
+    group.appendChild(list);
+    col.appendChild(group);
+  });
+}
+
+function selectOpt(btn) {
+  if (btn.classList.contains('used')) return;
+  const qnum = parseInt(btn.dataset.qnum);
+  if (checked[qnum] === true) return;
+  document.querySelectorAll('.opt-btn.selected').forEach(b => b.classList.remove('selected'));
+  if (selectedOpt && selectedOpt.el === btn) { selectedOpt = null; return; }
+  btn.classList.add('selected');
+  selectedOpt = { qnum, label: btn.dataset.opt, el: btn };
+}
+
+function fillBlank(qnum) {
+  const blankEl = document.getElementById(`b${qnum}`);
+  if (!blankEl || checked[qnum] === true) return;
+  if (!selectedOpt) {
+    if (filled[qnum]) { freeOpt(qnum); blankEl.innerHTML = `<span class="num">${qnum}</span>`; blankEl.className = 'blank'; delete filled[qnum]; delete checked[qnum]; updateScore(); }
+    return;
+  }
+  if (filled[qnum]) freeOpt(qnum);
+  const label = selectedOpt.label;
+  filled[qnum] = label;
+  delete checked[qnum];
+  blankEl.innerHTML = `<span class="num">${qnum}</span>${label}`;
+  blankEl.className = 'blank';
+  markUsed(qnum, label);
+  selectedOpt.el.classList.remove('selected');
+  selectedOpt = null;
+  hideFeedback();
+  updateScore();
+}
+
+function markUsed(qnum, label) {
+  const btn = document.getElementById(`opt-${qnum}-${label.replace(/\s+/g,'_')}`);
+  if (btn) btn.classList.add('used');
+}
+
+function freeOpt(qnum) {
+  const prev = filled[qnum];
+  if (!prev) return;
+  const btn = document.getElementById(`opt-${qnum}-${prev.replace(/\s+/g,'_')}`);
+  if (btn) btn.classList.remove('used');
+}
+
+function checkAll() {
+  let correct = 0, wrong = 0;
+  Object.entries(filled).forEach(([qnum, label]) => {
+    const n = parseInt(qnum);
+    const isCorrect = label === questions[n].answer;
+    checked[n] = isCorrect;
+    const blankEl = document.getElementById(`b${n}`);
+    if (!blankEl) return;
+    blankEl.innerHTML = `<span class="num">${n}</span>${label}`;
+    blankEl.className = 'blank locked ' + (isCorrect ? 'correct' : 'wrong');
+    if (isCorrect) correct++;
+    else {
+      wrong++;
+      setTimeout(() => {
+        freeOpt(n); delete filled[n]; delete checked[n];
+        blankEl.innerHTML = `<span class="num">${n}</span>`;
+        blankEl.className = 'blank';
+        blankEl.onclick = () => fillBlank(n);
+        updateScore();
+      }, 1200);
+    }
+  });
+  const filledCount = Object.keys(filled).length;
+  updateScore();
+  if ((TOTAL - filledCount) > 0 && wrong === 0) {
+    showFeedback(`You still have ${TOTAL - filledCount} blank(s) to fill. Keep going!`, 'info');
+  } else if (wrong === 0 && correct === TOTAL) {
+    showFeedback('🎉 Perfect! All 7 answers are correct. Read the explanations below.', 'all-correct');
+    document.getElementById('explanationsCard').classList.add('show');
+    setTimeout(() => showModal(correct), 500);
+  } else if (wrong > 0) {
+    showFeedback(`${correct} correct so far. The ${wrong} wrong answer(s) will reset — try again!`, 'has-errors');
+  }
+}
+
+function updateScore() {
+  const correctCount = Object.values(checked).filter(v => v === true).length;
+  const wrongCount   = Object.values(checked).filter(v => v === false).length;
+  const filledCount  = Object.keys(filled).length + correctCount;
+  document.getElementById('scoreCorrect').textContent = correctCount;
+  document.getElementById('scoreWrong').textContent   = wrongCount;
+  document.getElementById('scoreLeft').textContent    = Math.max(0, TOTAL - filledCount);
+  document.getElementById('progressFill').style.width = (filledCount / TOTAL * 100) + '%';
+}
+
+function showFeedback(msg, type) {
+  const box = document.getElementById('feedbackBox');
+  box.className = `feedback-box show ${type}`;
+  box.textContent = msg;
+}
+function hideFeedback() { document.getElementById('feedbackBox').className = 'feedback-box'; }
+
+function resetAll() {
+  filled = {}; checked = {}; selectedOpt = null;
+  hideFeedback();
+  document.getElementById('explanationsCard').classList.remove('show');
+  Object.keys(questions).forEach(qnum => {
+    const n = parseInt(qnum);
+    const el = document.getElementById(`b${n}`);
+    if (el) { el.innerHTML = `<span class="num">${n}</span>`; el.className = 'blank'; }
+  });
+  document.querySelectorAll('.opt-btn').forEach(btn => btn.classList.remove('used','selected'));
+  updateScore();
+}
+
+function showModal(correct) {
+  const pct = Math.round(correct / TOTAL * 100);
+  document.getElementById('modalTrophy').textContent = pct === 100 ? '🏆' : '🌟';
+  document.getElementById('modalTitle').textContent  = pct === 100 ? 'Perfect score!' : 'Great work!';
+  document.getElementById('modalScore').textContent  = `${correct} / ${TOTAL}`;
+  document.getElementById('modalMsg').textContent    = pct === 100 ? 'Outstanding! You answered all 7 questions correctly. Review the explanations to consolidate what you learned.' : `You got ${correct} out of ${TOTAL}. Review the explanations and try again.`;
+  document.getElementById('overlay').classList.add('show');
+}
+function closeModal() { document.getElementById('overlay').classList.remove('show'); }
+document.getElementById('overlay').addEventListener('click', function(e){ if(e.target===this) closeModal(); });
+
+renderOptions();
+updateScore();
+</script>
+</body>
+</html>

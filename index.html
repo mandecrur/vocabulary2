@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Work-life Balance – Cloze Exercises</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600&display=swap');
+  :root {
+    --ink: #1a1a2e; --paper: #f7f4ef; --accent: #4f46e5;
+    --accent-light: #eef2ff; --card: #ffffff; --neutral: #64748b;
+    --border: #e2e8f0; --shadow: 0 4px 20px rgba(0,0,0,0.09);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--paper); color: var(--ink);
+    min-height: 100vh; display: flex; flex-direction: column;
+    align-items: center; justify-content: center; padding: 32px 16px;
+  }
+  .eyebrow {
+    font-size: 0.72rem; font-weight: 600; letter-spacing: 2px;
+    text-transform: uppercase; color: var(--accent); margin-bottom: 10px; text-align: center;
+  }
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    text-align: center; line-height: 1.15; margin-bottom: 10px;
+  }
+  .subtitle {
+    color: var(--neutral); text-align: center; font-size: 0.95rem;
+    max-width: 480px; margin: 0 auto 40px; line-height: 1.6;
+  }
+  .cards {
+    display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;
+    max-width: 700px;
+  }
+  .card {
+    background: var(--card); border-radius: 18px; padding: 32px 28px;
+    box-shadow: var(--shadow); flex: 1; min-width: 240px; max-width: 300px;
+    text-decoration: none; color: var(--ink);
+    border: 2px solid transparent; transition: all 0.18s;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 8px 28px rgba(79,70,229,0.18); }
+  .card .num {
+    font-size: 0.72rem; font-weight: 700; letter-spacing: 1.5px;
+    text-transform: uppercase; color: var(--accent);
+  }
+  .card h2 { font-family: 'Playfair Display', serif; font-size: 1.25rem; }
+  .card p { font-size: 0.87rem; color: var(--neutral); line-height: 1.55; }
+  .card .questions { font-size: 0.8rem; font-weight: 600; color: var(--accent); margin-top: 4px; }
+  .card .arrow { font-size: 1.3rem; margin-top: auto; padding-top: 12px; }
+</style>
+</head>
+<body>
+  <div class="eyebrow">A37-EBRS-11 · Inglés como Lengua Extranjera</div>
+  <h1>Work-life Balance</h1>
+  <p class="subtitle">Two cloze exercises based on the original exam text. Choose an exercise to begin.</p>
+
+  <div class="cards">
+    <a class="card" href="exercise1.html">
+      <div class="num">Exercise 1</div>
+      <h2>Ronan &amp; Jo</h2>
+      <p>Office routines, hybrid schedules and the challenges of balancing work with family life.</p>
+      <div class="questions">Questions 46 – 53</div>
+      <div class="arrow">→</div>
+    </a>
+    <a class="card" href="exercise2.html">
+      <div class="num">Exercise 2</div>
+      <h2>Martina &amp; Leo</h2>
+      <p>Remote work, freelancing and co-working spaces in the modern world of work.</p>
+      <div class="questions">Questions 54 – 60</div>
+      <div class="arrow">→</div>
+    </a>
+  </div>
+</body>
+</html>
